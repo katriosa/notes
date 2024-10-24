@@ -1,19 +1,15 @@
 import { defineStore } from 'pinia'
 import type { Note } from '../types/Note'
 import { ref } from 'vue'
+import { watch } from 'vue'
 
 export const useNotesStore = defineStore('boardStore', () => {
   const notes = ref<Note[]>([])
 
-  // const notesFromLocalStorage = localStorage.getItem('notes')
-  // if (notesFromLocalStorage) {
-  //   notes.value = JSON.parse(notesFromLocalStorage)
-  //   // console.log(JSON.parse(notesFromLocalStorage))
-  // }
-
-  // const addNote = (note: Note): void => {
-  //   notes.value.push(note)
-  // }
+  const notesFromLocalStorage = localStorage.getItem('notes')
+  if (notesFromLocalStorage) {
+    notes.value = JSON.parse(notesFromLocalStorage)
+  }
 
   const addNewNote = (bg: string) => {
     const newNote = {
@@ -25,13 +21,24 @@ export const useNotesStore = defineStore('boardStore', () => {
     return newNote
   }
 
-  // watch(
-  //   () => notes.value,
-  //   state => {
-  //     localStorage.setItem('notes', JSON.stringify(state))
-  //   },
-  //   { deep: true },
-  // )
+  const updateNote = (id: number, text: string) => {
+    const currentNote = notes.value.find(note => note.id === id)
+    if (currentNote) {
+      currentNote.text = text
+    }
+  }
 
-  return { notes, addNewNote }
+  // watch(notes.value, newValue => {
+  //   console.log('store notes:', newValue)
+  // })
+
+  watch(
+    () => notes.value,
+    state => {
+      localStorage.setItem('notes', JSON.stringify(state))
+    },
+    { deep: true },
+  )
+
+  return { notes, addNewNote, updateNote }
 })

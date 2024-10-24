@@ -9,26 +9,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-// import { useNotesStore } from '../stores/NotesStore'
+import { onMounted, ref } from 'vue'
+import { useNotesStore } from '../stores/NotesStore'
 import type { Note } from '../types/Note'
 
-// const store = useNotesStore()
+const store = useNotesStore()
 const noteText = ref<string>('')
 
 const props = defineProps<Note>()
-// watch(noteText, newValue => {
-//   console.log('noteText changed:', newValue)
-// })
 
 const saveNote = () => {
-  console.log('savenote')
-  //   const newNote = {
-  //     id: props.noteId,
-  //     text: noteText.value,
-  //   }
-  //   store.addNote(newNote)
+  store.updateNote(props.id, noteText.value)
 }
+
+onMounted(() => {
+  noteText.value = props.text
+})
 </script>
 
 <style scoped>

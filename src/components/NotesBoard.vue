@@ -1,11 +1,11 @@
 <template>
   <div class="board">
     <Note
-      v-for="note in store.notes"
+      v-for="note in notes"
       :key="note.id"
       :id="note.id"
       :background="note.background"
-      text="note.text"
+      :text="note.text"
     />
   </div>
 </template>
@@ -13,8 +13,10 @@
 <script setup lang="ts">
 import Note from './NoteItem.vue'
 import { useNotesStore } from '../stores/NotesStore'
+import { computed } from 'vue'
 
 const store = useNotesStore()
+const notes = computed(() => store.notes)
 </script>
 
 <style scoped>
