@@ -1,19 +1,30 @@
-<script setup lang="ts">
-import { RouterView } from 'vue-router'
-</script>
-
 <template>
   <header>
     <h1>Заметки</h1>
     <div class="new-note-controls">
-      <button class="color-option option-1"></button>
-      <button class="color-option option-2"></button>
-      <button class="color-option option-3"></button>
+      <button
+        @click="store.addNewNote('pink')"
+        class="color-option option-pink"
+      ></button>
+      <button
+        @click="store.addNewNote('yellow')"
+        class="color-option option-yellow"
+      ></button>
+      <button
+        @click="store.addNewNote('blue')"
+        class="color-option option-blue"
+      ></button>
     </div>
   </header>
-
   <RouterView />
 </template>
+
+<script setup lang="ts">
+import { RouterView } from 'vue-router'
+import { useNotesStore } from './stores/NotesStore'
+
+const store = useNotesStore()
+</script>
 
 <style scoped>
 header {
@@ -34,22 +45,22 @@ header {
 .color-option {
   width: 2rem;
   height: 2rem;
-  background-color: var(--color-note-bg-1);
+  background-color: var(--color-note-pink);
 }
 
 .color-option:hover {
   border: 1px solid var(--color-text);
 }
 
-.option-1 {
-  background-color: var(--color-note-bg-1);
+.option-pink {
+  background-color: var(--color-note-pink);
 }
 
-.option-2 {
-  background-color: var(--color-note-bg-2);
+.option-yellow {
+  background-color: var(--color-note-yellow);
 }
 
-.option-3 {
-  background-color: var(--color-note-bg-3);
+.option-blue {
+  background-color: var(--color-note-blue);
 }
 </style>

@@ -1,12 +1,20 @@
 <template>
   <div class="board">
-    <Note :noteId="1" />
-    <Note :noteId="2" />
+    <Note
+      v-for="note in store.notes"
+      :key="note.id"
+      :id="note.id"
+      :background="note.background"
+      text="note.text"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import Note from './NoteItem.vue'
+import { useNotesStore } from '../stores/NotesStore'
+
+const store = useNotesStore()
 </script>
 
 <style scoped>

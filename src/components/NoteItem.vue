@@ -4,36 +4,35 @@
     @blur="saveNote"
     class="note-text"
     spellcheck="false"
+    :style="{ backgroundColor: `var(--color-note-${props.background})` }"
   ></textarea>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useNotesStore } from '../stores/NotesStore'
+// import { useNotesStore } from '../stores/NotesStore'
+import type { Note } from '../types/Note'
 
-const store = useNotesStore()
+// const store = useNotesStore()
 const noteText = ref<string>('')
 
-const props = defineProps<{
-  noteId: number
-}>()
-
+const props = defineProps<Note>()
 // watch(noteText, newValue => {
 //   console.log('noteText changed:', newValue)
 // })
 
 const saveNote = () => {
-  const newNote = {
-    id: props.noteId,
-    text: noteText.value,
-  }
-  store.addNote(newNote)
+  console.log('savenote')
+  //   const newNote = {
+  //     id: props.noteId,
+  //     text: noteText.value,
+  //   }
+  //   store.addNote(newNote)
 }
 </script>
 
 <style scoped>
 textarea.note-text {
-  background-color: var(--color-note-bg-1);
   padding: 0.6rem;
   width: 200px;
   height: 200px;
