@@ -30,6 +30,9 @@ const notes = computed(() => store.notes)
   background-size: 15px 15px;
   border-radius: 10px;
   padding: 0.7rem;
+  /*  */
+  padding-top: 2rem;
+  /*  */
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;

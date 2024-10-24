@@ -28,6 +28,10 @@ export const useNotesStore = defineStore('boardStore', () => {
     }
   }
 
+  const deleteNote = (id: number) => {
+    notes.value = notes.value.filter(note => note.id !== id)
+  }
+
   // watch(notes.value, newValue => {
   //   console.log('store notes:', newValue)
   // })
@@ -40,5 +44,5 @@ export const useNotesStore = defineStore('boardStore', () => {
     { deep: true },
   )
 
-  return { notes, addNewNote, updateNote }
+  return { notes, addNewNote, updateNote, deleteNote }
 })
