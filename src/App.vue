@@ -6,12 +6,9 @@ import { RouterView } from 'vue-router'
   <header>
     <h1>Заметки</h1>
     <div class="new-note-controls">
-      <div class="note-color-picker">
-        <div class="color-option option-1"></div>
-        <div class="color-option option-2"></div>
-        <div class="color-option option-3"></div>
-      </div>
-      <!-- <button>Создать</button> -->
+      <button class="color-option option-1"></button>
+      <button class="color-option option-2"></button>
+      <button class="color-option option-3"></button>
     </div>
   </header>
 
@@ -28,14 +25,9 @@ header {
 .new-note-controls {
   background-color: var(--color-board-background);
   display: flex;
+  justify-content: space-between;
   border-radius: 10px;
   padding: 1rem;
-  gap: 1rem;
-}
-
-.note-color-picker {
-  display: flex;
-  justify-content: space-between;
   gap: 1rem;
 }
 
@@ -43,6 +35,10 @@ header {
   width: 2rem;
   height: 2rem;
   background-color: var(--color-note-bg-1);
+}
+
+.color-option:hover {
+  border: 1px solid var(--color-text);
 }
 
 .option-1 {
@@ -56,12 +52,4 @@ header {
 .option-3 {
   background-color: var(--color-note-bg-3);
 }
-
-/* button {
-  border: none;
-  background-color: var(--color-background);
-  color: var(--color-note-text);
-  cursor: pointer;
-  padding: 0 1rem;
-} */
 </style>
