@@ -1,12 +1,17 @@
 <template>
   <div class="note-container">
-    <div v-if="isEditMode" class="edit-note-controls">
-      <img src="../../public/pin-icon.svg" alt="Pin" class="icon" />
-      <img src="../../public/delete-icon.svg" alt="Delete" class="icon" />
+    <div
+      v-if="isEditMode"
+      @mousedown="isClickOnNoteControls = true"
+      @click="handleClickOnNoteControls"
+      class="edit-note-controls"
+    >
+      <img src="/pin-icon.svg" alt="Pin" class="icon pin-icon" />
+      <img src="/delete-icon.svg" alt="Delete" class="icon delete-icon" />
     </div>
     <textarea
       v-model="noteText"
-      @blur="saveNote"
+      @blur="onBlur"
       @click="openEditMode"
       class="note-text"
       spellcheck="false"
@@ -26,13 +31,22 @@ const store = useNotesStore()
 const noteText = ref<string>('')
 const isEditMode = ref<boolean>(false)
 const firstClickAfterSave = ref<boolean>(true)
+const isClickOnNoteControls = ref<boolean>(false)
 
 const saveNote = () => {
   store.updateNote(props.id, noteText.value)
+  console.log(isEditMode.value)
   isEditMode.value = false
   firstClickAfterSave.value = true
 }
 
+const onBlur = () => {
+  if (!isClickOnNoteControls.value) {
+    saveNote()
+  } else {
+    isClickOnNoteControls.value = false
+  }
+}
 const openEditMode = (event: FocusEvent) => {
   isEditMode.value = true
 
@@ -41,6 +55,17 @@ const openEditMode = (event: FocusEvent) => {
     textarea.setSelectionRange(0, 0)
   }
   firstClickAfterSave.value = false
+}
+
+const handleClickOnNoteControls = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  if (target.closest('.delete-icon')) {
+    store.deleteNote(props.id)
+  }
+  if (target.closest('.pin-icon')) {
+    console.log('pin')
+  }
+  isEditMode.value = false
 }
 
 onMounted(() => {
@@ -55,7 +80,7 @@ onMounted(() => {
   height: 200px;
 }
 
-textarea.note-text {
+.note-text {
   padding: 0.6rem;
   width: 100%;
   height: 100%;
