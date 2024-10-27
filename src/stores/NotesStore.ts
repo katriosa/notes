@@ -16,9 +16,18 @@ export const useNotesStore = defineStore('boardStore', () => {
       id: Date.now(),
       text: '',
       background: bg,
+      position: { x: 0, y: 0 },
     }
     notes.value.push(newNote)
     return newNote
+  }
+
+  const moveNote = (id: number, x: number, y: number) => {
+    const note = notes.value.find(note => note.id === id)
+    if (note) {
+      note.position.x = x
+      note.position.y = y
+    }
   }
 
   const updateNote = (id: number, text: string) => {
@@ -44,5 +53,5 @@ export const useNotesStore = defineStore('boardStore', () => {
     { deep: true },
   )
 
-  return { notes, addNewNote, updateNote, deleteNote }
+  return { notes, addNewNote, updateNote, deleteNote, moveNote }
 })

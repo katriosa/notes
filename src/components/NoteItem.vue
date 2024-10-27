@@ -1,5 +1,9 @@
 <template>
-  <div class="note-container">
+  <div
+    class="note-container"
+    :style="{ left: `${note.position.x}px`, top: `${note.position.y}px` }"
+    @mousedown="startDragging"
+  >
     <div
       v-if="isEditMode"
       @mousedown="isClickOnNoteControls = true"
@@ -15,17 +19,22 @@
       @click="openEditMode"
       class="note-text"
       spellcheck="false"
-      :style="{ backgroundColor: `var(--color-note-${props.background})` }"
+      :style="{
+        backgroundColor: `var(--color-note-${note.background})`,
+        cursor: isDragging ? 'move' : 'auto',
+        caretColor: isDragging ? 'transparent' : 'black',
+      }"
     ></textarea>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useNotesStore } from '../stores/NotesStore'
 import type { Note } from '../types/Note'
 
-const props = defineProps<Note>()
+const props = defineProps<{ note: Note }>()
+const note = props.note
 
 const store = useNotesStore()
 const noteText = ref<string>('')
@@ -33,11 +42,45 @@ const isEditMode = ref<boolean>(false)
 const firstClickAfterSave = ref<boolean>(true)
 const isClickOnNoteControls = ref<boolean>(false)
 
+const isDragging = ref(false)
+const offset = ref({ x: 0, y: 0 })
+
+const startDragging = (event: MouseEvent) => {
+  console.log('startDragging')
+  isDragging.value = true
+
+  offset.value.x = event.clientX - note.position.x
+  offset.value.y = event.clientY - note.position.y
+
+  document.addEventListener('mousemove', onDrag)
+  document.addEventListener('mouseup', stopDragging)
+}
+
+const onDrag = (event: MouseEvent) => {
+  if (!isDragging.value) return
+
+  const newX = event.clientX - offset.value.x
+  const newY = event.clientY - offset.value.y
+
+  store.moveNote(note.id, newX, newY)
+}
+
+const stopDragging = () => {
+  if (isDragging.value) {
+    isDragging.value = false
+    document.removeEventListener('mousemove', onDrag)
+    document.removeEventListener('mouseup', stopDragging)
+  }
+}
+
+onUnmounted(stopDragging)
+
 const saveNote = () => {
-  store.updateNote(props.id, noteText.value)
-  console.log(isEditMode.value)
-  isEditMode.value = false
+  if (note.text !== noteText.value) {
+    store.updateNote(note.id, noteText.value)
+  }
   firstClickAfterSave.value = true
+  isEditMode.value = false
 }
 
 const onBlur = () => {
@@ -60,7 +103,7 @@ const openEditMode = (event: FocusEvent) => {
 const handleClickOnNoteControls = (event: MouseEvent) => {
   const target = event.target as HTMLElement
   if (target.closest('.delete-icon')) {
-    store.deleteNote(props.id)
+    store.deleteNote(note.id)
   }
   if (target.closest('.pin-icon')) {
     console.log('pin')
@@ -69,7 +112,7 @@ const handleClickOnNoteControls = (event: MouseEvent) => {
 }
 
 onMounted(() => {
-  noteText.value = props.text
+  noteText.value = note.text
 })
 </script>
 
@@ -103,6 +146,7 @@ onMounted(() => {
   top: -40px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 1;
 }
 
 .icon {

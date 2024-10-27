@@ -1,17 +1,11 @@
 <template>
   <div class="board">
-    <Note
-      v-for="note in notes"
-      :key="note.id"
-      :id="note.id"
-      :background="note.background"
-      :text="note.text"
-    />
+    <NoteItem v-for="note in notes" :key="note.id" :note="note" />
   </div>
 </template>
 
 <script setup lang="ts">
-import Note from './NoteItem.vue'
+import NoteItem from './NoteItem.vue'
 import { useNotesStore } from '../stores/NotesStore'
 import { computed } from 'vue'
 
@@ -30,11 +24,10 @@ const notes = computed(() => store.notes)
   background-size: 15px 15px;
   border-radius: 10px;
   padding: 0.7rem;
-  /*  */
-  padding-top: 2rem;
-  /*  */
+  padding-top: 3rem;
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
+  overflow: hidden;
 }
 </style>
