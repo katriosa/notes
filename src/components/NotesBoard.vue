@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import NoteItem from './NoteItem.vue'
+import NoteItem from './NoteItem/NoteItem.vue'
 import { useNotesStore } from '../stores/NotesStore'
 import { computed } from 'vue'
 
@@ -24,7 +24,7 @@ const notes = computed(() => store.notes)
   background-size: 15px 15px;
   border-radius: 10px;
   padding: 0.7rem;
-  padding-top: 3rem;
+  padding-top: 40px;
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;

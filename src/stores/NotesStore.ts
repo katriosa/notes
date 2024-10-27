@@ -20,7 +20,6 @@ export const useNotesStore = defineStore('boardStore', () => {
       isPinned: false,
     }
     notes.value.push(newNote)
-    return newNote
   }
 
   const moveNote = (id: number, x: number, y: number) => {
@@ -41,10 +40,6 @@ export const useNotesStore = defineStore('boardStore', () => {
   const deleteNote = (id: number) => {
     notes.value = notes.value.filter(note => note.id !== id)
   }
-
-  // watch(notes.value, newValue => {
-  //   console.log('store notes:', newValue)
-  // })
 
   watch(
     () => notes.value,
