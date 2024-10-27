@@ -3,4 +3,5 @@ export interface Note {
   text: string
   background: string
   position: { x: number; y: number }
+  isPinned: boolean
 }

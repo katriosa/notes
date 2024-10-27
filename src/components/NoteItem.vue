@@ -13,6 +13,7 @@
       <img src="/pin-icon.svg" alt="Pin" class="icon pin-icon" />
       <img src="/delete-icon.svg" alt="Delete" class="icon delete-icon" />
     </div>
+    <div v-if="note.isPinned" class="pinned-indicator"></div>
     <textarea
       v-model="noteText"
       @blur="onBlur"
@@ -46,7 +47,7 @@ const isDragging = ref(false)
 const offset = ref({ x: 0, y: 0 })
 
 const startDragging = (event: MouseEvent) => {
-  console.log('startDragging')
+  if (note.isPinned) return
   isDragging.value = true
 
   offset.value.x = event.clientX - note.position.x
@@ -106,7 +107,7 @@ const handleClickOnNoteControls = (event: MouseEvent) => {
     store.deleteNote(note.id)
   }
   if (target.closest('.pin-icon')) {
-    console.log('pin')
+    note.isPinned = !note.isPinned
   }
   isEditMode.value = false
 }
@@ -124,10 +125,10 @@ onMounted(() => {
 }
 
 .note-text {
-  padding: 0.6rem;
+  padding: 1rem;
   width: 100%;
   height: 100%;
-  font-size: 14px;
+  font-size: 12px;
   border: none;
   resize: none;
   overflow: hidden;
@@ -146,7 +147,20 @@ onMounted(() => {
   top: -40px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 2;
+}
+
+.pinned-indicator {
+  background-color: var(--color-pin);
+  border: 4px solid var(--color-pin-border);
+  width: 120px;
+  height: 30px;
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1;
+  box-sizing: border-box;
 }
 
 .icon {

@@ -17,6 +17,7 @@ export const useNotesStore = defineStore('boardStore', () => {
       text: '',
       background: bg,
       position: { x: 0, y: 0 },
+      isPinned: false,
     }
     notes.value.push(newNote)
     return newNote
