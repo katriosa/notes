@@ -1,5 +1,9 @@
 <template>
-  <div class="board">
+  <div
+    class="board"
+    ref="boardElement"
+    :style="{ gridTemplateColumns: `repeat(${numberOfColumns}, 200px)` }"
+  >
     <NoteItem v-for="note in notes" :key="note.id" :note="note" />
   </div>
 </template>
@@ -7,10 +11,19 @@
 <script setup lang="ts">
 import NoteItem from './NoteItem/NoteItem.vue'
 import { useNotesStore } from '../stores/NotesStore'
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 const store = useNotesStore()
 const notes = computed(() => store.notes)
+const numberOfColumns = computed(() => store.numberOfColumns)
+const boardElement = ref<HTMLElement | null>(null)
+
+onMounted(() => {
+  if (boardElement.value) {
+    const boardRect = boardElement.value.getBoundingClientRect()
+    store.getNumberOfColumns(Math.round(boardRect.width))
+  }
+})
 </script>
 
 <style scoped>
@@ -23,11 +36,12 @@ const notes = computed(() => store.notes)
   background-position: 5px 5px;
   background-size: 15px 15px;
   border-radius: 10px;
-  padding: 0.7rem;
-  padding-top: 40px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
+  padding-top: 45px;
+  padding-bottom: 15px;
+  display: grid;
+  grid-auto-rows: 200px;
+  gap: 30px;
+  justify-content: center;
   overflow: hidden;
 }
 </style>

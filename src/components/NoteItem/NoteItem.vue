@@ -1,7 +1,13 @@
 <template>
   <div
     class="note-container"
-    :style="{ left: `${note.position.x}px`, top: `${note.position.y}px` }"
+    ref="noteElement"
+    :style="{
+      left: `${note.position.x}px`,
+      top: `${note.position.y}px`,
+      gridColumn: note.positionInGrid.column,
+      gridRow: note.positionInGrid.row,
+    }"
     @mousedown="startDragging"
   >
     <EditNoteControls
@@ -39,6 +45,7 @@ const isEditMode = ref(false)
 const firstClickAfterSave = ref<boolean>(true)
 const isDragging = ref(false)
 const offset = ref({ x: 0, y: 0 })
+const noteElement = ref<HTMLElement | null>(null)
 
 const startDragging = (event: MouseEvent) => {
   if (note.isPinned) return
